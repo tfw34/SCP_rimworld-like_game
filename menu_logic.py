@@ -35,7 +35,7 @@ def load_assets(path):
             images.append(path + "\\" + x)
     return [images, video, sound, fonts, data]
 
-def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg="", button_num=0, file_path="", action=None, img_path=None, click_sound="assets/Audio/UI/menu_click_01.mp3", touch_sound=""):
+def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg="", button_num=0, file_path="", clickable=True, action=None, img_path=None, click_sound="assets/Audio/UI/menu_click_01.mp3", touch_sound=""):
     """:param click_sound: path to soundfile that plays when button is clicked
     :param touch_sound: path to soundfile that plays when button is hovered over"""
     mouse = __main__.mouse_pos
@@ -56,11 +56,11 @@ def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg=
     else:
         pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1])) # draws rect when not hovered over
         pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
-    temp = colour1
-    colour1 = colour2
-    colour2 = temp
-    pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1]))  # draws rect when not hovered over
-    pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
+        # temp = colour1
+        # colour1 = colour2
+        # colour2 = temp
+        # pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1]))  # draws rect when not hovered over
+        # pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
     font = pygame.font.Font('freesansbold.ttf', 32)
     screen.blit(font.render(msg, True, text_colour), (xy[0] + 10, xy[1] + 10))
     if submsg != "":
@@ -128,7 +128,8 @@ def load_game_sc(): # Logic for load_game menu.
     load_saves = os.listdir(os.getcwd() + "\\save")
     chosen_file = ""
     if len(load_saves) == 0:
-        button(screen, "No Saves Found", [750, 100], [300, 100], (255, 255, 255), (200, 200, 200), (0, 0, 0), clickable=False)
+        # def text_box(screen, xy, wh, text, colour, text_colour, sub_text="", text_colour2=(255, 255, 255)):
+        text_box(screen, [750, 100], [300, 100], "No Saves Found", (255, 255, 255), (0, 0, 0))
     for x in range(0, len(load_saves)):
         file_size = str(int(((os.stat(os.getcwd() + "\\save\\" + load_saves[x]).st_size) / 1000) / 1000)) + "mb"
         if x < 7:
