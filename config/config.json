@@ -1,0 +1,43 @@
+{"settings": {
+    "video_conf": {
+      "resolution": "1920x1010",
+      "fullscreen": true,
+      "fixedfps": 60,
+      "vsync": 1
+    },
+    "debug": {
+      "debug_console": true,
+      "logging": true,
+      "debug_keys": true
+    }, "audio": {
+      "sfx_vol": 100,
+      "music_vol": 100
+    },
+    "game": {
+      "n_tiles": 6,
+      "movement_box": 100,
+      "Comment": "movement_box: see in_menu[2] part of __main__"
+    }
+  },
+  "element_data": {
+    "main_menu": {
+      "bg_colour": [20, 20, 20],
+      "fg_colour": [50, 50, 50],
+      "new_game": [50, 100],
+      "load_game": [50, 210],
+      "settings": [50, 320],
+      "exit": [50, 430]
+    }
+  },
+  "game_tx": {
+    "ground_tx": {
+      "concrete_01": "concrete01.png",
+      "dirt_01":     "dirt01.png",
+      "ltc_f_01":    "LTC_F_01.png",
+      "ltc_w_01":    "LTC_F_01.png"
+    },
+    "sprit_tx": {
+
+    }
+  }
+}
