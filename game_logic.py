@@ -14,9 +14,8 @@ config = open("config/config.json")
 config = json.load(config)
 squares = config["settings"]["game"]["n_tiles"]
 
-def write_current_save(filename): # used to load save to render_logic
-    file = open(str(filename) + ".tmp", "w")
-    file.close()
+def load_current_save(filename): # used to load save to render_logic
+    menu_logic.selected_file = filename
     menu_logic.set_menu(5)
 
 def new_game(squares=squares):
@@ -46,8 +45,7 @@ def change_to_opengl(): # sets the graphics to opengl rather than pygame. MUST R
         __main__.screen = pygame.display.set_mode((res[0], res[1]), DOUBLEBUF | OPENGL | FULLSCREEN, vsync=vsync_conf)
     else:
         __main__.screen = pygame.display.set_mode((res[0], res[1]), DOUBLEBUF | OPENGL, vsync=vsync_conf)
-    gluPerspective(90, (res[0] / res[1]), 0.1, 60.0)
-    glTranslatef(0, 0, -20)
+    gluPerspective(45, (res[0] / res[1]), 0.1, 100.0)
 
 
 def load_game(filename): # Must run change_to_opengl() before this function

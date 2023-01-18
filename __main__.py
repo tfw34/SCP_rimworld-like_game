@@ -56,10 +56,13 @@ background.fill((menu_bg[0], menu_bg[1], menu_bg[2]))
 
 # represents which menu the user is in
 # index 0 is main_menu, 1 is settigs, 2 is in_game, 3 is load_game, 4 is new game, 5 is a transition to change graphics(see change_to_opengl() in game_logic)
+# 5 is run only once, as it is used to change the graphics, then sets menu to 2
 in_menu = [True, False, False, False, False, False]
 scroll_zoom = 0
 previous_scroll = 0
+camera_x, camera_y, camera_z = 0, 0, -2
 
+click_counter = 0
 while True:
     screen.blit(background, (0, 0))
     for event in pygame.event.get():
@@ -71,7 +74,12 @@ while True:
                     exit()
         if event.type == pygame.MOUSEWHEEL:
             scroll_zoom += event.y
-
+    mouse_pos = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if click[0] == True:
+        click_counter += 1 # counts how long a click has been held down for
+    else:
+        click_counter = 0
     if in_menu[0] == True:
         screen.blit(menu_image, (400, 0))
         menu_logic.main_menu()
@@ -80,23 +88,16 @@ while True:
     if in_menu[3] == True:
         menu_logic.load_game_sc()
     if in_menu[4] == True:
-        game_logic.new_game()
-    if in_menu[2] == True: # Do all opengl rendering here.
+        game_logic.new_game() # creates a new file
+    if in_menu[2] == True: # Do all opengl rendering and game logic here.
         render_logic.render_game(loaded_game)
         pygame.display.flip()
         pygame.time.wait(10)
         previous_scroll = scroll_zoom
     if in_menu[5] == True: # sets the graphics to opengl, and loads the file that needs to be read
         game_logic.change_to_opengl()
-        glTranslatef(-int(config["settings"]["game"]["n_tiles"] / 4), int(config["settings"]["game"]["n_tiles"] / 4), 0)
-        tmp_files = []
-        for x in os.listdir(current_location):
-            if x[-4::] == ".tmp":
-                tmp_files.append(x)
-        if len(tmp_files) > 1:
-            print("TOO MANY TMP FILES FOUND. CLEAR ALL TMP FILES")
 
-        loaded_game = game_logic.load_game(tmp_files[0][0:-4])
+        loaded_game = game_logic.load_game(menu_logic.selected_file)
         menu_logic.set_menu(2) # starts rendering process
     if in_menu[2] == False: # If not in opengl, then render pygame
         pygame.display.update()

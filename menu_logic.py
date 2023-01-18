@@ -9,8 +9,8 @@ root = tk.Tk()
 
 mixer = pygame.mixer
 mixer.init()
-click02 = mixer.music.load('assets/Audio/UI/menu_click_02.mp3')
-
+click02 = mixer.music.load('assets/Audio/UI/menu_click_01.mp3')
+global selected_file
 
 def set_menu(menu): # sets the var of which menu is present to (menu)
     for x in range(0, len(__main__.in_menu)):
@@ -39,11 +39,11 @@ def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg=
     """:param click_sound: path to soundfile that plays when button is clicked
     :param touch_sound: path to soundfile that plays when button is hovered over"""
     mouse = __main__.mouse_pos
-    click = __main__.click
+    click = __main__.click_counter
     if xy[0] + wh[0] > mouse[0] > xy[0] and xy[1] + wh[1] > mouse[1] > xy[1]:
         pygame.draw.rect(screen, colour1, (xy[0], xy[1], wh[0], wh[1])) # draws the rect when hovered over
         pygame.draw.rect(screen, colour2, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
-        if click[0]:
+        if click > 0 and click < 2:
             if click_sound != "": # if path is not specificed to nothing, play the sound
                 mixer.music.load(click_sound)
                 mixer.music.play()
@@ -131,8 +131,8 @@ def load_game_sc(): # Logic for load_game menu.
         # def text_box(screen, xy, wh, text, colour, text_colour, sub_text="", text_colour2=(255, 255, 255)):
         text_box(screen, [750, 100], [300, 100], "No Saves Found", (255, 255, 255), (0, 0, 0))
     for x in range(0, len(load_saves)):
-        file_size = str(int(((os.stat(os.getcwd() + "\\save\\" + load_saves[x]).st_size) / 1000) / 1000)) + "mb"
+        file_size = str(int(((os.stat(os.getcwd() + "\\save\\" + load_saves[x]).st_size) / 1000))) + "kb"
         if x < 7:
-            save = button(screen, load_saves[x], [300, 210 + (110 * x)], [500, 100], (255, 255, 255), (200, 200, 200), (0, 0, 0), submsg=file_size, action=game_logic.write_current_save, file_path=load_saves[x])
+            save = button(screen, load_saves[x], [300, 210 + (110 * x)], [500, 100], (255, 255, 255), (200, 200, 200), (0, 0, 0), submsg=file_size, action=game_logic.load_current_save, file_path=load_saves[x])
         if x > 7:
-            save = button(screen, load_saves[x], [300 + 600, 210 + (110 * (x - 8))], [500, 100], (255, 255, 255), (200, 200, 200), (0, 0, 0), submsg=file_size, action=game_logic.write_current_save, file_path=load_saves[x])
+            save = button(screen, load_saves[x], [300 + 600, 210 + (110 * (x - 8))], [500, 100], (255, 255, 255), (200, 200, 200), (0, 0, 0), submsg=file_size, action=game_logic.load_current_save, file_path=load_saves[x])
