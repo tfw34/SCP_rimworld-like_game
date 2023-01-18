@@ -35,39 +35,45 @@ def load_assets(path):
             images.append(path + "\\" + x)
     return [images, video, sound, fonts, data]
 
-def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg="", button_num=0, file_path="", clickable=True, action=None, img_path=None, click_sound="assets/Audio/UI/menu_click_01.mp3", touch_sound=""):
+def button(screen, msg, xy, wh, colour1, colour2, text_colour=(0, 0, 0), submsg="", button_num=0, file_path="", action=None, img_path=None, click_sound="assets/Audio/UI/menu_click_01.mp3", touch_sound=""):
     """:param click_sound: path to soundfile that plays when button is clicked
     :param touch_sound: path to soundfile that plays when button is hovered over"""
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    mouse_hovering = False
-    if clickable == True:
-        if xy[0] + wh[0] > mouse[0] > xy[0] and xy[1] + wh[1] > mouse[1] > xy[1]:
-            pygame.draw.rect(screen, colour1, (xy[0], xy[1], wh[0], wh[1])) # draws the rect when hovered over
-            pygame.draw.rect(screen, colour2, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
-            if click[0]:
-                if click_sound != "": # if path is not specificed to nothing, play the sound
-                    mixer.music.play()
-                if action != None:
-                    if file_path != "": # if the filepath param is not empty, load it to the function. Primarily used in load_game_sc()
-                        print("Loading ", file_path)
-                        return action(file_path)
-                    else:
-                        action()
-        else:
-            pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1])) # draws rect when not hovered over
-            pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
+    mouse = __main__.mouse_pos
+    click = __main__.click
+    if xy[0] + wh[0] > mouse[0] > xy[0] and xy[1] + wh[1] > mouse[1] > xy[1]:
+        pygame.draw.rect(screen, colour1, (xy[0], xy[1], wh[0], wh[1])) # draws the rect when hovered over
+        pygame.draw.rect(screen, colour2, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
+        if click[0]:
+            if click_sound != "": # if path is not specificed to nothing, play the sound
+                mixer.music.load(click_sound)
+                mixer.music.play()
+            if action != None:
+                if file_path != "": # if the filepath param is not empty, load it to the function. Primarily used in load_game_sc()
+                    print("Loading ", file_path)
+                    return action(file_path)
+                else:
+                    action()
     else:
-        temp = colour1
-        colour1 = colour2
-        colour2 = temp
-        pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1]))  # draws rect when not hovered over
+        pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1])) # draws rect when not hovered over
         pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
+    temp = colour1
+    colour1 = colour2
+    colour2 = temp
+    pygame.draw.rect(screen, colour2, (xy[0], xy[1], wh[0], wh[1]))  # draws rect when not hovered over
+    pygame.draw.rect(screen, colour1, (xy[0] + 3, xy[1] + 3, wh[0] - 3, wh[1] - 3))
     font = pygame.font.Font('freesansbold.ttf', 32)
     screen.blit(font.render(msg, True, text_colour), (xy[0] + 10, xy[1] + 10))
     if submsg != "":
         font = pygame.font.Font('freesansbold.ttf', 25)
         screen.blit(font.render(submsg, True, colour2), (xy[0] + 10, xy[1] + 40))
+
+def text_box(screen, xy, wh, text, colour, text_colour, sub_text="", text_colour2=(255, 255, 255)):
+    pygame.draw.rect(screen, colour, (xy[0], xy[1], wh[0], wh[1]))  # draws the rect when hovered over
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    screen.blit(font.render(text, True, text_colour), (xy[0] + 10, xy[1] + 10))
+    if sub_text != "":
+        font = pygame.font.Font('freesansbold.ttf', 25)
+        screen.blit(font.render(sub_text, True, text_colour2), (xy[0] + 10, xy[1] + 40))
 
 def main_menu():
     screen = __main__.screen
